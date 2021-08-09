@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Drum Kit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+  <div class="keys">
+    <div data-key="65" class="key">
+      <kbd>A</kbd>
+      <span class="sound">clap</span>
+    </div>
+    <div data-key="83" class="key">
+      <kbd>S</kbd>
+      <span class="sound">hihat</span>
+    </div>
+    <div data-key="68" class="key">
+      <kbd>D</kbd>
+      <span class="sound">kick</span>
+    </div>
+    <div data-key="70" class="key">
+      <kbd>F</kbd>
+      <span class="sound">openhat</span>
+    </div>
+    <div data-key="71" class="key">
+      <kbd>G</kbd>
+      <span class="sound">boom</span>
+    </div>
+    <div data-key="72" class="key">
+      <kbd>H</kbd>
+      <span class="sound">ride</span>
+    </div>
+    <div data-key="74" class="key">
+      <kbd>J</kbd>
+      <span class="sound">snare</span>
+    </div>
+    <div data-key="75" class="key">
+      <kbd>K</kbd>
+      <span class="sound">tom</span>
+    </div>
+    <div data-key="76" class="key">
+      <kbd>L</kbd>
+      <span class="sound">tink</span>
+    </div>
+  </div>
+
+  <audio data-key="65" src="sounds/clap.wav"></audio>
+  <audio data-key="83" src="sounds/hihat.wav"></audio>
+  <audio data-key="68" src="sounds/kick.wav"></audio>
+  <audio data-key="70" src="sounds/openhat.wav"></audio>
+  <audio data-key="71" src="sounds/boom.wav"></audio>
+  <audio data-key="72" src="sounds/ride.wav"></audio>
+  <audio data-key="74" src="sounds/snare.wav"></audio>
+  <audio data-key="75" src="sounds/tom.wav"></audio>
+  <audio data-key="76" src="sounds/tink.wav"></audio>
+
+<script>
+<!--思路-->
+//1.按下相应的键 绑定事件
+//2.动画效果,音乐效果
+
+   //初始化
+   function init() {
+     let keys = Array.from(document.querySelectorAll('.key'));
+     console.log(keys);
+     //所有key 添加transitionend 事件
+     keys.forEach(key => key.addEventListener('transitionend', animation));
+   }
+
+   //动画
+   function animation(e) {
+     console.log('动画颜色')
+     if (e.propertyName !== 'transform') return;
+      e.target.classList.remove('playing');
+   }
+
+   //音乐
+   function playSound(e) {
+     const key = document.querySelector(`div[data-key="${e.keyCode}"]`);
+     const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+     console.log(key);
+     console.log(audio);
+
+    //添加样式
+    key.classList.add('playing');
+
+    //播放前 音为0
+    audio.currentTime = 0;
+    audio.play();
+    }
+
+   function _main() {
+     //按下键盘
+     init();
+     window.addEventListener('keydown', playSound);
+   }
+   _main()
+
+</script>
+
+
+</body>
+</html>
