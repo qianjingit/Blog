@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scoped CSS Variables and JS</title>
+  <style>
+    /*
+      misc styles, nothing to do with CSS variables
+    */
+    body {
+      text-align: center;
+      background: #193549;
+      color: white;
+      font-family: 'helvetica neue', sans-serif;
+      font-weight: 100;
+      font-size: 50px;
+    }
+
+    .controls {
+      margin-bottom: 50px;
+    }
+
+    input {
+      width: 100px;
+    }
+
+    /* css变量控制*/
+    :root{
+      --spacing:10px;
+      --blur:10px;
+      --base:#ffc600;
+    }
+
+    img{
+      padding: var(--spacing);
+      filter: blur(var(--blur));
+      background: var(--base);
+    }
+
+    .h1{
+      color: var(--base);
+    }
+
+  </style>
+</head>
+<body>
+  <h2>Update CSS Variables with <span class='h1'>JS</span></h2>
+
+  <div class="controls">
+    <label for="spacing">Spacing:</label>
+    <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+
+    <label for="blur">Blur:</label>
+    <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+
+    <label for="base">Base Color</label>
+    <input id="base" type="color" name="base" value="#ffc600">
+  </div>
+
+  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+
+  <script>
+    // 思路：
+    // 1.边框大小变化
+    //    a).监听移动控制值的变化10-200
+    // 2.图片模糊
+    // 3.边框颜色变化 + 标题js二字同步变化
+
+    function inputChang() {
+       let unit = this.dataset.sizing;
+       if(!unit) {
+         unit = '';
+       } 
+       //setProperty  新增一个CSS样式
+       document.documentElement.style.setProperty(`--${this.name}`, this.value + unit);     
+       console.log(`--${this.name}`, this.value + unit);
+    }
+
+    //监听行为
+    function action() {
+        let input_chang = document.querySelectorAll('.controls input');
+        input_chang.forEach(input => input.addEventListener('change', inputChang));
+        input_chang.forEach(input => input.addEventListener('mousemove', inputChang));
+     }  
+
+    function _main() {
+          action();
+    }
+
+    _main()
+     
+
+
+
+
+  
+
+ 
+  </script>
+
+</body>
+</html>
