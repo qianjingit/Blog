@@ -29,6 +29,43 @@ function updateButton() {
 video.addEventListener('play', updateButton);
 video.addEventListener('pause', updateButton);
 
+//进度条
+function handleProgress() {
+   const percent = (video.currentTime / video.duration) * 100;
+   progressBar.style.flexBasis = `${percent}%`;
+}
+video.addEventListener('timeupdate', handleProgress);
+
+//播放时间节点
+function scrub(e) {
+    const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration;
+    video.currentTime = scrubTime;
+  }
+progress.addEventListener('click', scrub); 
+
+//进度条拖动
+let mousedown = false;
+progress.addEventListener('mousemove',(e) => mousedown && scrub(e));
+progress.addEventListener('mousedown',() => mousedown = true);
+progress.addEventListener('mouseup',() => mousedown = false);
+
+//快进快退
+function skip() {
+    video.currentTime += parseFloat(this.dataset.skip);
+}
+skipButtons.forEach(button => button.addEventListener('click', skip));
+
+
+//音量调节和播放速度调节
+function handleRangeUpdate() {
+    video[this.name] = this.value;
+}
+ranges.forEach(range => range.addEventListener('change', handleRangeUpdate));
+ranges.forEach(range => range.addEventListener('mousemove', handleRangeUpdate));
+
+
+
+
 
 
 
